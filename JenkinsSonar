@@ -1,10 +1,10 @@
-def artifactname = "devops-snow-build-app.jar"
+def artifactname = "devops-snow-build-Prasad.jar"
 def repoName = "JenkinsDevOpsProject"
 def pipelineName = "SunilPipelines/Sunil-Scripted-Pipeline-Sonar"
 def semanticVersion = "${env.BUILD_NUMBER}.0.0"
 def packageName = "devops-snow-build-pkg_${env.BUILD_NUMBER}"
 def version = "${env.BUILD_NUMBER}.0"
-def pkgName = "devops-snow-build-pkg_${env.BUILD_NUMBER}"
+def pkgName = "devops-snow-build-Prasad_pkg_${env.BUILD_NUMBER}"
 
 pipeline {
   agent any
@@ -26,6 +26,10 @@ pipeline {
            steps {
               
               sh 'mvn test'
+	       echo 'Deploying the change....'
+		    sonarSummaries()
+                    snDevOpsArtifact(artifactsPayload: """{"artifacts": [{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}","semanticVersion": "1.${env.BUILD_NUMBER}.0","repositoryName": "${repoName}"}],"branchName":"master"}""")
+           	    snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
            }
            post {
              always {
@@ -36,10 +40,7 @@ pipeline {
       stage('Deploy') {
                  steps {
                     
-                    echo 'Deploying the change....'
-		    sonarSummaries()
-                    snDevOpsArtifact(artifactsPayload: """{"artifacts": [{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}","semanticVersion": "1.${env.BUILD_NUMBER}.0","repositoryName": "${repoName}"}],"branchName":"master"}""")
-           	    snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
+                   
 		    snDevOpsChange(ignoreErrors:false)
                     
                  }
