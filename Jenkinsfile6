@@ -20,7 +20,19 @@ pipeline {
                   echo ">> Deploy in prod"
                   snDevOpsChange()
               }
-      }      
+      }  
+   stage("Sample") {
+             steps{
+                  echo "Sample1"
+                  
+              }
+      }  
+   stage("Sample2") {
+             steps{
+                  echo "Sample1"
+                  
+              }
+      }  
       
   }
 }
