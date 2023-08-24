@@ -27,7 +27,10 @@ pipeline {
       stage('Deploy') {
                  steps {            
                    
-		    echo "Deploy"      
+		    echo "Deploy"   
+            script {
+                        error "This pipeline stops here!"
+                  }
                  }
       }
    
