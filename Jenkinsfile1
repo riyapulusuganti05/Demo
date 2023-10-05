@@ -25,7 +25,7 @@ pipeline {
               
               sh 'mvn test'
 	    
-	      sonarSummaries()
+	      sonarSummaries2()
               snDevOpsArtifact(artifactsPayload: """{"artifacts": [{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}","semanticVersion": "1.${env.BUILD_NUMBER}.0","repositoryName": "${repoName}"}],"branchName":"${env.BRANCH_NAME}"}""")
               snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"${env.BRANCH_NAME}"}""")
            }
@@ -48,7 +48,20 @@ pipeline {
  }
  
 }
-
+def sonarSummaries2() {
+	withSonarQubeEnv('sonarcloud.io'){
+		if(fileExists("sonar-project.properties")) {
+			sh '${SCANNER_HOME}/bin/sonar-scanner'
+		} else {
+			sh 'mvn clean verify sonar:sonar \
+			    -Dsonar.login=1ff462f03228674e3a684569d716aad1aff286bb \
+			    -Dsonar.host.url=https://sonarcloud.io \
+			    -Dsonar.organization=riyapulusuganti \
+			    -Dsonar.projectKey=riyapulusuganti_Demo'
+		}
+	}
+	
+}
 def sonarSummaries() {
 
   // withSonarQubeEnv('SonarCloud') {
