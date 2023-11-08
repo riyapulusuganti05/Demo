@@ -26,8 +26,8 @@ pipeline {
               sh 'mvn test'
 	    
 	      //sonarSummaries2()
-              snDevOpsArtifact(artifactsPayload: """{"artifacts": [{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}","semanticVersion": "1.${env.BUILD_NUMBER}.0","repositoryName": "${repoName}"}],"branchName":"${env.BRANCH_NAME}"}""")
-              snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"${env.BRANCH_NAME}"}""")
+              snDevOpsArtifact(artifactsPayload: """{"artifacts": [{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}","semanticVersion": "1.${env.BUILD_NUMBER}.0","repositoryName": "${repoName}"}],"branchName":"master"}""")
+              snDevOpsPackage(name: "${pkgName}-${env.BUILD_NUMBER}", artifactsPayload: """{"artifacts":[{"name": "${artifactname}", "version": "1.${env.BUILD_NUMBER}", "repositoryName": "${repoName}"}], "branchName":"master"}""")
 
 	      snDevOpsSecurityResult securityResultAttributes: "{'scanner': 'Veracode','applicationName': 'PetStoreAPI-Github', 'securityToolId' : '66b2cc8ec3a17110b31ff42c050131b3'}" //'securityToolId' : '05bf3d33c32f2110cd4cf92f0501311b'}"	
                
@@ -42,7 +42,7 @@ pipeline {
                  steps {
                 snDevOpsChange changeRequestDetails: '{ "attributes": {"chg_model": "adffaa9e4370211072b7f6be5bb8f2ed"}}'
 		stageName = "Deploy"
-		changeRequestNumber = snDevOpsGetChangeNumber(changeDetails: """{"stage_name":"${stageName}"}""")
+		changeRequestNumber = snDevOpsGetChangeNumber changeDetails: '{ "pipeline_name": "Prasad_Venkata", "build_number": "${env.BUILD_NUMBER}", "stage_name": "Deploy", "branch_name": "master"}'
 		echo "${changeRequestNumber}"
 		snDevOpsUpdateChangeInfo(changeRequestDetails: """{"close_code": "successful", "state": "3", "close_notes": "Deployment to PROD was successful test 123", "short_description": "Test description in Get_Change Step by", "priority": "1", "justification": "test justification", "description": "test description",  "cab_required": true, "comments": "This update for work notes is from jenkins file", "work_notes": "Update of change request through Update API"}""", changeRequestNumber: """${changeRequestNumber}""")
 		
