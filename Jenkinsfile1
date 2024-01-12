@@ -1,4 +1,4 @@
-def artifactname = "devops-snow-build-app.jar"
+def artifactname = "devops-snow-build-venkata-app.jar"
 def repoName = "JenkinsDevOpsProject"
 def pipelineName = "SunilPipelines/Sunil-Scripted-Pipeline-Sonar"
 def semanticVersion = "${env.BUILD_NUMBER}.0.0"
